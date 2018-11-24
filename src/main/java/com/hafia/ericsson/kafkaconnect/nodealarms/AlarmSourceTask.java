@@ -26,7 +26,7 @@ public class AlarmSourceTask extends SourceTask {
   public List<SourceRecord> poll() throws InterruptedException {
     log.info("MyEricsson-SourceTask.poll() TODO: Create SourceRecord objects that will be sent the kafka cluster.");
     //throw new UnsupportedOperationException("This has not been implemented.");
-
+    Thread.sleep(5 * 1_000); //sleep for 5 seconds
     return null;
   }
 
