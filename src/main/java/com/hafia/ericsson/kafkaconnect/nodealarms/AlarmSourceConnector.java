@@ -36,18 +36,18 @@ public class AlarmSourceConnector extends SourceConnector {
   public void start(Map<String, String> map) {
     config = new AlarmSourceConnectorConfig(map);
 
-    log.info("SourceConnector.start() TODO: Add things you need to do to setup your connector.");
+    log.info("MyEricsson-SourceConnector.start() TODO: Add things you need to do to setup your connector.");
   }
 
   @Override
   public Class<? extends Task> taskClass() {
-    log.info("SourceConnector.taskClass() TODO: Return your task implementation.");
+    log.info("MyEricsson-SourceConnector.taskClass() TODO: Return your task implementation.");
     return AlarmSourceTask.class;
   }
 
   @Override
   public List<Map<String, String>> taskConfigs(int i) {
-    log.info("SourceConnector.taskConfigs() TODO: Define the individual task configurations that will be executed.");
+    log.info("MyEricsson-SourceConnector.taskConfigs() TODO: Define the individual task configurations that will be executed.");
 
     ArrayList<Map<String, String>> configs = new ArrayList<>(1);
     configs.add(config.originalsStrings());
@@ -56,7 +56,7 @@ public class AlarmSourceConnector extends SourceConnector {
 
   @Override
   public void stop() {
-    log.info("SourceConnector.stop() TODO: Do things that are necessary to stop your connector.");
+    log.info("MyEricsson-SourceConnector.stop() TODO: Do things that are necessary to stop your connector.");
   }
 
   @Override

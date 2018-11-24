@@ -20,7 +20,7 @@ public class AlarmSinkTask extends SinkTask {
   @Override
   public void start(Map<String, String> settings) {
     this.config = new AlarmSinkConnectorConfig(settings);
-    log.info("TODO: Create resources like database or api connections here.");
+    log.info("MyEricsson-TODO: Create resources like database or api connections here.");
   }
 
   @Override

@@ -19,17 +19,19 @@ public class AlarmSourceTask extends SourceTask {
 
   @Override
   public void start(Map<String, String> map) {
-    log.info("SourceTask.start() TODO: Do things here that are required to start your task. This could be open a connection to a database, etc.");
+    log.info("MyEricsson-SourceTask.start() TODO: Do things here that are required to start your task. This could be open a connection to a database, etc.");
   }
 
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
-    log.info("SourceTask.poll() TODO: Create SourceRecord objects that will be sent the kafka cluster.");
-    throw new UnsupportedOperationException("This has not been implemented.");
+    log.info("MyEricsson-SourceTask.poll() TODO: Create SourceRecord objects that will be sent the kafka cluster.");
+    //throw new UnsupportedOperationException("This has not been implemented.");
+
+    return null;
   }
 
   @Override
   public void stop() {
-    log.info("SourceTask.stop() TODO: Do whatever is required to stop your task.");
+    log.info("MyEricsson-SourceTask.stop() TODO: Do whatever is required to stop your task.");
   }
 }

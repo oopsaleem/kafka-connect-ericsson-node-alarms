@@ -27,7 +27,7 @@ public class AlarmSinkConnector extends SinkConnector {
 
   @Override
   public List<Map<String, String>> taskConfigs(int maxTasks) {
-    log.info("TODO: Define the individual task configurations that will be executed.");
+    log.info("MyEricsson-TODO: Define the individual task configurations that will be executed.");
 
     /**
      * This is used to schedule the number of tasks that will be running. This should not exceed maxTasks.
@@ -42,7 +42,7 @@ public class AlarmSinkConnector extends SinkConnector {
   public void start(Map<String, String> settings) {
     config = new AlarmSinkConnectorConfig(settings);
 
-    log.info("TODO: Add things you need to do to setup your connector.");
+    log.info("MyEricsson-TODO: Add things you need to do to setup your connector.");
 
     /**
      * This will be executed once per connector. This can be used to handle connector level setup. For
@@ -58,7 +58,7 @@ public class AlarmSinkConnector extends SinkConnector {
 
   @Override
   public void stop() {
-    log.info("TODO: Do things that are necessary to stop your connector.");
+    log.info("MyEricsson-TODO: Do things that are necessary to stop your connector.");
   }
 
   @Override
@@ -68,7 +68,7 @@ public class AlarmSinkConnector extends SinkConnector {
 
   @Override
   public Class<? extends Task> taskClass() {
-    log.info("TODO: Return your task implementation.");
+    log.info("MyEricsson-TODO: Return your task implementation.");
     return AlarmSinkTask.class;
   }
 
