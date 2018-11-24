@@ -16,10 +16,6 @@ import com.github.jcustenborder.kafka.connect.utils.config.DocumentationNote;
 import com.github.jcustenborder.kafka.connect.utils.config.DocumentationTip;
 import com.github.jcustenborder.kafka.connect.utils.config.Title;
 
-/**
- *
- */
-
 @Description("This is a description of this connector and will show up in the documentation")
 @DocumentationImportant("This is a important information that will show up in the documentation.")
 @DocumentationTip("This is a tip that will show up in the documentation.")

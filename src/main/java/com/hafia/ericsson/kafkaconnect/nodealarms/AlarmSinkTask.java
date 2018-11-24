@@ -13,10 +13,7 @@ import java.util.Map;
 import com.github.jcustenborder.kafka.connect.utils.VersionUtil;
 
 public class AlarmSinkTask extends SinkTask {
-  /*
-    Your connector should never use System.out for logging. All of your classes should use slf4j
-    for logging
- */
+
   private static Logger log = LoggerFactory.getLogger(AlarmSinkTask.class);
 
   AlarmSinkConnectorConfig config;
