@@ -25,7 +25,7 @@ public class AlarmFileSchemas {
 
     public static Schema VALUE_SCHEMA = SchemaBuilder.struct().name(SCHEMA_VALUE)
             .version(1)
-            .field(FILE_ROWS_AFFECTED_FIELD, Schema.INT64_SCHEMA)
+            .field(FILE_ROWS_AFFECTED_FIELD, Schema.INT32_SCHEMA)
             .field(FILE_CONTENT_FIELD, Schema.STRING_SCHEMA)
             .build();
 }
