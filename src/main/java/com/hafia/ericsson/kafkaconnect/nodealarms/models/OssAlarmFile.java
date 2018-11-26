@@ -7,7 +7,7 @@ import java.time.Instant;
 import static com.hafia.ericsson.kafkaconnect.nodealarms.AlarmFileSchemas.*;
 
 public class OssAlarmFile {
-    private Integer id;
+    private Long id;
     private Integer generation;
     private Integer rowsAffected;
     private String fileContent;
@@ -26,7 +26,7 @@ public class OssAlarmFile {
      * @param fileContent content of alarm records.
      * @param modifiedAt file modified time.
      */
-    public OssAlarmFile(Integer id, Integer generation, Integer rowsAffected, String fileContent, Instant modifiedAt) {
+    public OssAlarmFile(Long id, Integer generation, Integer rowsAffected, String fileContent, Instant modifiedAt) {
         super();
 
         this.id = id;
@@ -36,9 +36,9 @@ public class OssAlarmFile {
         this.modifiedAt = modifiedAt;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public OssAlarmFile withId(Integer id) {
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public OssAlarmFile withId(Long id) {
         this.id = id;
         return this;
     }
@@ -73,7 +73,7 @@ public class OssAlarmFile {
 
     public static OssAlarmFile fromJson(JSONObject jsonObject) {
         OssAlarmFile ossAlarmFile = new OssAlarmFile();
-        ossAlarmFile.withId(jsonObject.getInt(ID_FIELD));
+        ossAlarmFile.withId(jsonObject.getLong(ID_FIELD));
         ossAlarmFile.withGeneration(jsonObject.getInt(OSS_GENERATION_FIELD));
         ossAlarmFile.withRowsAffected(jsonObject.getInt(FILE_ROWS_AFFECTED_FIELD));
         ossAlarmFile.withModifiedAt(Instant.parse(jsonObject.getString(MODIFIED_AT_FIELD)));

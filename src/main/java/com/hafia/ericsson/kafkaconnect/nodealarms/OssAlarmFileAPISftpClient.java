@@ -70,10 +70,10 @@ public class OssAlarmFileAPISftpClient {
                     Pattern rowsAffectedRx = Pattern.compile("(\\d+) rows affected");
                     Matcher rowsAffectedMatcher = rowsAffectedRx.matcher(fileContent);
                     if (rowsAffectedMatcher.find())
-                        jo.put(FILE_ROWS_AFFECTED_FIELD, Long.parseLong(rowsAffectedMatcher.group(1)));
+                        jo.put(FILE_ROWS_AFFECTED_FIELD, Integer.parseInt(rowsAffectedMatcher.group(1)));
                     else jo.put(FILE_ROWS_AFFECTED_FIELD, -1);
 
-                    jo.put(MODIFIED_AT_FIELD, modifiedAt.toEpochMilli());
+                    jo.put(MODIFIED_AT_FIELD, modifiedAt.toString());
                     jo.put(FILE_CONTENT_FIELD, fileContent);
                     jsonArray.put(jo);
                 }

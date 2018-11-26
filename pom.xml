@@ -5,7 +5,7 @@
 
     <groupId>com.hafia.ericsson.kafkaconnect.nodealarms</groupId>
     <artifactId>kafka-connect-ericsson-node-alarms</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>kafka-connect-ericsson-node-alarms</name>
