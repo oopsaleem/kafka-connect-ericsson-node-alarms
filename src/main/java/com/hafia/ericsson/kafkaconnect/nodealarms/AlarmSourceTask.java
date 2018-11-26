@@ -114,18 +114,17 @@ public class AlarmSourceTask extends SourceTask {
 
   private Struct buildRecordKey(OssAlarmFile ossAlarmFile){
     // Key Schema
-    Struct key = new Struct(KEY_SCHEMA)
-            .put(ID_FIELD, ossAlarmFile.getId())
-            .put(OSS_GENERATION_FIELD, ossAlarmFile.getGeneration())
-            .put(FILE_ROWS_AFFECTED_FIELD, ossAlarmFile.getRowsAffected());
-    return key;
+      Struct key = new Struct(KEY_SCHEMA)
+              .put(ID_FIELD, ossAlarmFile.getId())
+              .put(OSS_GENERATION_FIELD, ossAlarmFile.getGeneration())
+              .put(MODIFIED_AT_FIELD, ossAlarmFile.getModifiedAt().toEpochMilli());
+      return key;
   }
 
     private Struct buildRecordValue(OssAlarmFile ossAlarmFile){
         Struct valueStruct = new Struct(VALUE_SCHEMA)
                 .put(FILE_ROWS_AFFECTED_FIELD, ossAlarmFile.getRowsAffected())
                 .put(FILE_CONTENT_FIELD, ossAlarmFile.getFileContent())
-                .put(MODIFIED_AT_FIELD, ossAlarmFile.getModifiedAt().toEpochMilli())
         ;
         return valueStruct;
     }
