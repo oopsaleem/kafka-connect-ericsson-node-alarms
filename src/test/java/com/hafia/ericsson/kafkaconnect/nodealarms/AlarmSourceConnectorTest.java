@@ -1,33 +1,37 @@
 package com.hafia.ericsson.kafkaconnect.nodealarms;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.common.config.ConfigValue;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import static com.hafia.ericsson.kafkaconnect.nodealarms.AlarmSourceConnectorConfig.*;
+import static com.hafia.ericsson.kafkaconnect.nodealarms.AlarmSourceConnectorConfig.NODE_AUTH_PASSWORD_CONFIG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AlarmSourceConnectorTest {
+class AlarmSourceConnectorTest {
 
-  private Map<String, String> initialConfig() {
-    Map<String, String> baseProps = new HashMap<>();
-    baseProps.put(TOPIC_CONFIG, "node-alarms");
-    baseProps.put(NODE_HOST_CONFIG, "10.6.6.122");
-    baseProps.put(NODE_PORT_CONFIG, "22");
-    baseProps.put(NODE_AUTH_USERNAME_CONFIG, "foo");
-    baseProps.put(NODE_AUTH_PASSWORD_CONFIG, "bar");
-    return (baseProps);
+  private ConfigDef configDef = AlarmSourceConnectorConfig.config();
+
+  @Test
+  void initialConfigIsValid() {
+    assert (configDef.validate(Static.initialConfig())
+            .stream()
+            .allMatch(configValue -> configValue.errorMessages().size() == 0));
   }
 
   @Test
-  public void taskConfigsShouldReturnOneTaskConfig() {
-    AlarmSourceConnector alarmSourceConnector = new AlarmSourceConnector();
-    alarmSourceConnector.start(initialConfig());
-    assertEquals(alarmSourceConnector.taskConfigs(1).size(),1);
-    assertEquals(alarmSourceConnector.taskConfigs(10).size(),1);
+  void validatePassword() {
+    Map<String, String> config = Static.initialConfig();
+    ConfigValue configValue = configDef.validateAll(config).get(NODE_AUTH_PASSWORD_CONFIG);
+    assert (configValue.errorMessages().size() == 0);
   }
+
+    @Test
+    public void taskConfigsShouldReturnOneTaskConfig() {
+        AlarmSourceConnector alarmSrcConn = new AlarmSourceConnector();
+        alarmSrcConn.start(Static.initialConfig());
+        assertEquals(alarmSrcConn.taskConfigs(1).size(),1);
+        assertEquals(alarmSrcConn.taskConfigs(10).size(),1);
+    }
 }

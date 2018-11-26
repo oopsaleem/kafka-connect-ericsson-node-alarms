@@ -22,9 +22,10 @@ import com.github.jcustenborder.kafka.connect.utils.config.Title;
 @DocumentationTip("This is a tip that will show up in the documentation.")
 @Title("Super Source Connector") //This is the display name that will show up in the documentation.
 @DocumentationNote("This is a note that will show up in the documentation")
-public class AlarmSourceConnector extends SourceConnector {
 
+public class AlarmSourceConnector extends SourceConnector {
   private static Logger log = LoggerFactory.getLogger(AlarmSourceConnector.class);
+
   private AlarmSourceConnectorConfig config;
 
   @Override
@@ -35,28 +36,23 @@ public class AlarmSourceConnector extends SourceConnector {
   @Override
   public void start(Map<String, String> map) {
     config = new AlarmSourceConnectorConfig(map);
-
-    log.info("MyEricsson-SourceConnector.start() TODO: Add things you need to do to setup your connector.");
   }
 
   @Override
   public Class<? extends Task> taskClass() {
-    log.info("MyEricsson-SourceConnector.taskClass() TODO: Return your task implementation.");
     return AlarmSourceTask.class;
   }
 
   @Override
   public List<Map<String, String>> taskConfigs(int i) {
-    log.info("MyEricsson-SourceConnector.taskConfigs() TODO: Define the individual task configurations that will be executed.");
-
-    ArrayList<Map<String, String>> configs = new ArrayList<>(1);
-    configs.add(config.originalsStrings());
-    return configs;
+      // force only single task to run.
+      ArrayList<Map<String, String>> configs = new ArrayList<>(1);
+      configs.add(config.originalsStrings());
+      return configs;
   }
 
   @Override
   public void stop() {
-    log.info("MyEricsson-SourceConnector.stop() TODO: Do things that are necessary to stop your connector.");
   }
 
   @Override
