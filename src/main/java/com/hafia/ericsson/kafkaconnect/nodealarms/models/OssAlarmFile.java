@@ -72,7 +72,6 @@ public class OssAlarmFile {
     }
 
     public static OssAlarmFile fromJson(JSONObject jsonObject) {
-
         OssAlarmFile ossAlarmFile = new OssAlarmFile();
         ossAlarmFile.withId(jsonObject.getInt(ID_FIELD));
         ossAlarmFile.withGeneration(jsonObject.getInt(OSS_GENERATION_FIELD));

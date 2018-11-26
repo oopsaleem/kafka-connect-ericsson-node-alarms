@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.regex.*;
+
+import static com.hafia.ericsson.kafkaconnect.nodealarms.AlarmFileSchemas.*;
 
 public class OssAlarmFileAPISftpClient {
     private static Logger log = LoggerFactory.getLogger(OssAlarmFileAPISftpClient.class);
@@ -54,9 +57,24 @@ public class OssAlarmFileAPISftpClient {
 
                     String fileContent = byteArrayOutputStream.toString("UTF-8");
                     JSONObject jo = new JSONObject();
-                    jo.put("fileName", fileName);
-                    jo.put("fileContent", fileContent);
-                    jo.put("modifiedAt", modifiedAt);
+
+                    Pattern regex = Pattern.compile("\\d{8,}");
+                    Matcher regexMatcher = regex.matcher(fileName);
+                    if (regexMatcher.find())
+                        jo.put(ID_FIELD, regexMatcher.group());
+                    else
+                        jo.put(ID_FIELD, 100_000_000);
+
+                    jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
+
+                    Pattern rowsAffectedRx = Pattern.compile("(\\d+) rows affected");
+                    Matcher rowsAffectedMatcher = rowsAffectedRx.matcher(fileContent);
+                    if (rowsAffectedMatcher.find())
+                        jo.put(FILE_ROWS_AFFECTED_FIELD, Integer.parseInt(rowsAffectedMatcher.group(1)));
+                    else jo.put(FILE_ROWS_AFFECTED_FIELD, -1);
+
+                    jo.put(MODIFIED_AT_FIELD, modifiedAt);
+                    jo.put(FILE_CONTENT_FIELD, fileContent);
                     jsonArray.put(jo);
                 }
             }

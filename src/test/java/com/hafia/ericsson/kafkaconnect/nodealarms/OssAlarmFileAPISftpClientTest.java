@@ -1,6 +1,5 @@
 package com.hafia.ericsson.kafkaconnect.nodealarms;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;

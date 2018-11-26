@@ -14,7 +14,7 @@ public class Static {
         baseProps.put(NODE_HOST_CONFIG, "10.10.10.10");
         baseProps.put(NODE_PORT_CONFIG, "22");
         baseProps.put(NODE_AUTH_USERNAME_CONFIG, "testuser");
-        baseProps.put(NODE_AUTH_PASSWORD_CONFIG, "testpasswd");
+        baseProps.put(NODE_AUTH_PASSWORD_CONFIG, "testpassword");
         baseProps.put(FILE_PATHS_CONFIG, "/home/ehusalo/fileDirectory/2gFiles/alarmLog/2G_alarm_out_*; " +
                 "/home/ehusalo/alarmFiles/filesInserted/2GFiles/2G_alarm_out_*");
         baseProps.put(SINCE_CONFIG, "30");
