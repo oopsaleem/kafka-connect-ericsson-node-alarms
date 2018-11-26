@@ -18,8 +18,9 @@ public class AlarmFileSchemas {
     // Key Schema
     public static Schema KEY_SCHEMA = SchemaBuilder.struct().name(SCHEMA_KEY)
             .version(1)
-            .field(ID_FIELD, Schema.INT32_SCHEMA)
+            .field(ID_FIELD, Schema.INT64_SCHEMA)
             .field(OSS_GENERATION_FIELD, Schema.INT32_SCHEMA)
+            .field(MODIFIED_AT_FIELD, Schema.INT64_SCHEMA)
             .build();
 
     public static Schema VALUE_SCHEMA = SchemaBuilder.struct().name(SCHEMA_VALUE)

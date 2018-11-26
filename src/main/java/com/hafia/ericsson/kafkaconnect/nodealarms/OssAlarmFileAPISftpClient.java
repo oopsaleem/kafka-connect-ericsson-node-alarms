@@ -61,7 +61,7 @@ public class OssAlarmFileAPISftpClient {
                     Pattern regex = Pattern.compile("\\d{8,}");
                     Matcher regexMatcher = regex.matcher(fileName);
                     if (regexMatcher.find())
-                        jo.put(ID_FIELD, regexMatcher.group());
+                        jo.put(ID_FIELD, Long.parseLong(regexMatcher.group()));
                     else
                         jo.put(ID_FIELD, 100_000_000);
 
@@ -70,10 +70,10 @@ public class OssAlarmFileAPISftpClient {
                     Pattern rowsAffectedRx = Pattern.compile("(\\d+) rows affected");
                     Matcher rowsAffectedMatcher = rowsAffectedRx.matcher(fileContent);
                     if (rowsAffectedMatcher.find())
-                        jo.put(FILE_ROWS_AFFECTED_FIELD, Integer.parseInt(rowsAffectedMatcher.group(1)));
+                        jo.put(FILE_ROWS_AFFECTED_FIELD, Long.parseLong(rowsAffectedMatcher.group(1)));
                     else jo.put(FILE_ROWS_AFFECTED_FIELD, -1);
 
-                    jo.put(MODIFIED_AT_FIELD, modifiedAt);
+                    jo.put(MODIFIED_AT_FIELD, modifiedAt.toEpochMilli());
                     jo.put(FILE_CONTENT_FIELD, fileContent);
                     jsonArray.put(jo);
                 }
