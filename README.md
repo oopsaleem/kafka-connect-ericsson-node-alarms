@@ -1,9 +1,25 @@
+```running
+cd ~/kafka-connect-ericsson-node-alarms/
+git pull origin
+rm -rf src/test/
+mvn clean package
+sudo docker run -it --rm -p 2181:2181 -p 3030:3030 -p 8081:8081 \
+      -p 8082:8082 -p 8083:8083 -p 9092:9092 -e ADV_HOST=127.0.0.1 \
+      -e RUNTESTS=0 -e max_request_size=20000000 \
+      -v ~/kafka-connect-ericsson-node-alarms/target:/connectors/EricssonNodeAlarms landoop/fast-data-dev
+```
+```monitoring
+sudo docker run --rm -it -v "$(pwd)":/connectors/EricssonNodeAlarms --net=host landoop/fast-data-dev bash
+
+kafka-topics --create --topic demo-alarm-source-connector-topic --partitions 3 --replication-factor 1 --zookeeper 127.0.0.1:2181
+kafka-console-consumer --zookeeper 127.0.0.1:2181 --topic demo-alarm-source-connector-topic --from-beginning
+```
+
 # Introduction
 
 Welcome to your new Kafka Connect connector!
 
 # Running in development
-
 
 The [docker-compose.yml](docker-compose.yml) that is included in this repository is based on the Confluent Platform Docker
 images. Take a look at the [quickstart](http://docs.confluent.io/current/cp-docker-images/docs/quickstart.html#getting-started-with-docker-client)

@@ -40,7 +40,6 @@ public class OssAlarmFileAPISftpClient {
         JSONArray jsonArray = new JSONArray();
         try {
             for (String filePath : config.filePathsConfig.split("; |;")) {
-                log.info("ls filePath: " + filePath);
                 Vector<ChannelSftp.LsEntry> list = channelSftp.ls(filePath);
                 for(ChannelSftp.LsEntry entry : list) {
                     SftpATTRS sftpATTRS = entry.getAttrs();
@@ -77,7 +76,7 @@ public class OssAlarmFileAPISftpClient {
                     String stringModifiedAt = modifiedAt.toString();
                     for (int i = nextRecordSequence; i < splitContent.length - 1; i++) {
                         jo.put(ID_FIELD, fieldByName);
-                        jo.put(RECORD_SEQUENCE_FIELD, fieldByName);
+                        jo.put(RECORD_SEQUENCE_FIELD, i);
                         jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
                         jo.put(MODIFIED_AT_FIELD, stringModifiedAt);
                         jo.put(FILE_ROWS_AFFECTED_FIELD, rowsAffectedValue);

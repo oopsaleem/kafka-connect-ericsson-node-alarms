@@ -107,7 +107,7 @@ public class AlarmSourceTask extends SourceTask {
 
     @Override
     public void stop() {
-        log.info("MyEricsson-SourceTask.stop() TODO: Do whatever is required to stop your task.");
+        //TODO: Do whatever is required to stop your task.
     }
 
     private Map<String, String> sourcePartition() {
