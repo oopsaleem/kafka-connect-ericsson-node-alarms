@@ -31,16 +31,16 @@ public class OssAlarmFileAPISftpClient {
     public OssAlarmFileAPISftpClient(AlarmSourceConnectorConfig config) {
         this.config = config;
         errorMessages = new ArrayList<>();
-
-        initSftp();
     }
 
     protected JSONArray getNextFile(Instant since) {
-//        if(! channelSftp.isConnected()) throw new Exception("Server is disconnected.");
+        //#IMPORTANT#connect to server is a cycle.
+        connect();
 
         JSONArray jsonArray = new JSONArray();
         try {
             for (String filePath : config.filePathsConfig.split("; |;")) {
+                log.info("ls filePath: " + filePath);
                 Vector<ChannelSftp.LsEntry> list = channelSftp.ls(filePath);
                 for(ChannelSftp.LsEntry entry : list) {
                     SftpATTRS sftpATTRS = entry.getAttrs();
@@ -102,7 +102,7 @@ public class OssAlarmFileAPISftpClient {
         return jsonArray;
     }
 
-    private void initSftp(){
+    private void connect(){
         final JSch ssh = new JSch();
         try {
             session = ssh.getSession(config.nodeAuthUsernameConfig, config.nodeHostConfig, config.nodePortConfig);
@@ -155,15 +155,21 @@ public class OssAlarmFileAPISftpClient {
 
     private void disconnect() {
         try {
-            if (channel != null)
-                channel.disconnect();
+            if (channelSftp != null)
+                channelSftp.disconnect();
         } finally {
-            channel = null;
+            channelSftp = null;
             try {
-                if (session != null)
-                    session.disconnect();
+                if (channel != null)
+                    channel.disconnect();
             } finally {
-                session = null;
+                channel = null;
+                try {
+                    if (session != null)
+                        session.disconnect();
+                } finally {
+                    session = null;
+                }
             }
         }
     }
