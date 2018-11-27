@@ -33,7 +33,7 @@ public class OssAlarmFileAPISftpClient {
         errorMessages = new ArrayList<>();
     }
 
-    protected JSONArray getNextFile(Instant since) {
+    protected JSONArray getNextFile(Instant since, Integer nextRecordSequence) {
         //#IMPORTANT#connect to server is a cycle.
         connect();
 
@@ -75,12 +75,13 @@ public class OssAlarmFileAPISftpClient {
 
                     //records
                     String stringModifiedAt = modifiedAt.toString();
-                    for (int i = 0; i < splitContent.length - 1; i++) {
+                    for (int i = nextRecordSequence; i < splitContent.length - 1; i++) {
                         jo.put(ID_FIELD, fieldByName);
+                        jo.put(RECORD_SEQUENCE_FIELD, fieldByName);
                         jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
                         jo.put(MODIFIED_AT_FIELD, stringModifiedAt);
                         jo.put(FILE_ROWS_AFFECTED_FIELD, rowsAffectedValue);
-                        jo.put(FILE_CONTENT_FIELD, splitContent[i]);
+                        jo.put(ALARM_RECORD_FIELD, splitContent[i]);
                         jsonArray.put(jo);
                     }
 
