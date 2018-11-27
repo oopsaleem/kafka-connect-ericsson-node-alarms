@@ -10,6 +10,7 @@ import net.sf.expectit.ExpectBuilder;
 import net.sf.expectit.Result;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import static net.sf.expectit.filter.Filters.removeColors;
 import static net.sf.expectit.filter.Filters.removeNonPrintable;
@@ -35,8 +36,11 @@ public class EricssonNodeAPIsshClient {
             Session session = jSch.getSession(config.nodeAuthUsernameConfig, config.nodeHostConfig);
             if(!config.nodeAuthPasswordConfig.isEmpty())
             session.setPassword(config.nodeAuthPasswordConfig);
-            session.setConfig( "PreferredAuthentications", "publickey,keyboard-interactive,password");
-            session.setConfig( "StrictHostKeyChecking", "no");
+            Properties properties = new Properties();
+            properties.put( "PreferredAuthentications", "publickey,keyboard-interactive,password");
+            properties.put("StrictHostKeyChecking", "no");
+            properties.put("UseDNS", "no");
+            session.setConfig(properties);
             session.connect();
 
             Channel channel = session.openChannel("shell");

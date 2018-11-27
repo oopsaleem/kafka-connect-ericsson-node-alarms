@@ -53,6 +53,7 @@ public class OssAlarmFileAPISftpClient {
                     String fileName = entry.getFilename();
                     if(fileName.replaceAll("[. ]" , "").isEmpty()) continue; //ignore . and .. files
                     String path = filePath.substring(0, filePath.lastIndexOf("/") + 1);
+                    log.info("Sftp getting file: " + path + fileName);
                     channelSftp.get(path + fileName, byteArrayOutputStream);
 
                     String fileContent = byteArrayOutputStream.toString("UTF-8");
@@ -114,6 +115,7 @@ public class OssAlarmFileAPISftpClient {
             properties.put("UseDNS", "no");
             session.setConfig(properties);
             session.connect(30_000);
+            log.info("Connected to host: " + config.nodeHostConfig);
         } catch ( JSchException e) {
             session = null;
             errorMessages.add(e.getMessage());
@@ -127,6 +129,7 @@ public class OssAlarmFileAPISftpClient {
         try {
             channel = session.openChannel("sftp");
             channel.connect(60_000);
+            log.info("Sftp channel opened. ");
             channelSftp = (ChannelSftp) channel;
         } catch (JSchException e) {
             channel = null;
