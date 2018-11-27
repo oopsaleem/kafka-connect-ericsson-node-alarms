@@ -61,10 +61,10 @@ public class AlarmSourceTask extends SourceTask {
   public List<SourceRecord> poll() throws InterruptedException {
     // fetch data
     final ArrayList<SourceRecord> records = new ArrayList<>();
-    JSONArray alarmFiles = ossAlarmFileAPISftpClient.getNextFile(nextQuerySince);
+    JSONArray fileRecords = ossAlarmFileAPISftpClient.getNextFile(nextQuerySince);
     // we'll count how many results we get with i
     boolean fetched = false;
-    for (Object obj : alarmFiles) {
+    for (Object obj : fileRecords) {
       OssAlarmFile ossAlarmFile = OssAlarmFile.fromJson((JSONObject) obj);
       SourceRecord sourceRecord = generateSourceRecord(ossAlarmFile);
       records.add(sourceRecord);
@@ -83,16 +83,16 @@ public class AlarmSourceTask extends SourceTask {
   }
 
   private SourceRecord generateSourceRecord(OssAlarmFile ossAlarmFile) {
-    return new SourceRecord(
-            sourcePartition(),
-            sourceOffset(ossAlarmFile.getModifiedAt()),
-            config.topicConfig,
-            null, // partition will be inferred by the framework
-            KEY_SCHEMA,
-            buildRecordKey(ossAlarmFile),
-            VALUE_SCHEMA,
-            buildRecordValue(ossAlarmFile),
-            ossAlarmFile.getModifiedAt().toEpochMilli());
+      return new SourceRecord(
+              sourcePartition(),
+              sourceOffset(ossAlarmFile.getModifiedAt()),
+              config.topicConfig,
+              null, // partition will be inferred by the framework
+              KEY_SCHEMA,
+              buildRecordKey(ossAlarmFile),
+              VALUE_SCHEMA,
+              buildRecordValue(ossAlarmFile),
+              ossAlarmFile.getModifiedAt().toEpochMilli());
   }
 
   @Override

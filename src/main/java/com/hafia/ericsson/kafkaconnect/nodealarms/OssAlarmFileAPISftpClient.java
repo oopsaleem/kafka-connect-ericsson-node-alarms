@@ -61,22 +61,29 @@ public class OssAlarmFileAPISftpClient {
 
                     Pattern regex = Pattern.compile("\\d{8,}");
                     Matcher regexMatcher = regex.matcher(fileName);
-                    if (regexMatcher.find())
-                        jo.put(ID_FIELD, Long.parseLong(regexMatcher.group()));
-                    else
-                        jo.put(ID_FIELD, 100_000_000);
+                    long fieldByName;
+                    if (regexMatcher.find()) fieldByName = Long.parseLong(regexMatcher.group());
+                    else fieldByName = 1_000_000L;
 
-                    jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
 
+                    String[] splitContent = fileContent.split("#sep#\\s+");
                     Pattern rowsAffectedRx = Pattern.compile("(\\d+) rows affected");
-                    Matcher rowsAffectedMatcher = rowsAffectedRx.matcher(fileContent);
-                    if (rowsAffectedMatcher.find())
-                        jo.put(FILE_ROWS_AFFECTED_FIELD, Integer.parseInt(rowsAffectedMatcher.group(1)));
-                    else jo.put(FILE_ROWS_AFFECTED_FIELD, -1);
+                    Matcher rowsAffectedMatcher = rowsAffectedRx.matcher(splitContent[splitContent.length - 1]);
+                    int rowsAffectedValue;
+                    if (rowsAffectedMatcher.find()) rowsAffectedValue = Integer.parseInt(rowsAffectedMatcher.group(1));
+                    else rowsAffectedValue = -1;
 
-                    jo.put(MODIFIED_AT_FIELD, modifiedAt.toString());
-                    jo.put(FILE_CONTENT_FIELD, fileContent);
-                    jsonArray.put(jo);
+                    //records
+                    String stringModifiedAt = modifiedAt.toString();
+                    for (int i = 0; i < splitContent.length - 1; i++) {
+                        jo.put(ID_FIELD, fieldByName);
+                        jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
+                        jo.put(MODIFIED_AT_FIELD, stringModifiedAt);
+                        jo.put(FILE_ROWS_AFFECTED_FIELD, rowsAffectedValue);
+                        jo.put(FILE_CONTENT_FIELD, splitContent[i]);
+                        jsonArray.put(jo);
+                    }
+
                 }
             }
         } catch (SftpException e ) {
