@@ -8,7 +8,7 @@ if hash docker 2>/dev/null; then
            oopsaleem/kafka-connect-ericsson-node-alarms:1.0
 elif hash connect-standalone 2>/dev/null; then
     # for mac users who used homebrew
-    connect-standalone config/worker.properties config/DemoSourceConnectorExample.properties
+    connect-standalone config/worker.properties config/demo.properties
 elif [[ -z $KAFKA_HOME ]]; then
     # for people who installed kafka vanilla
     $KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/etc/schema-registry/connect-avro-standalone.properties config/DemoSourceConnectorExample.properties
