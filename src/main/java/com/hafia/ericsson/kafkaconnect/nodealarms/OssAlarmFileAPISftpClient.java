@@ -34,7 +34,6 @@ public class OssAlarmFileAPISftpClient {
     }
 
     protected JSONArray getNextFile(Instant since, Integer nextRecordSequence) {
-        log.info(String.format("Starting nextRecordSequence = %d", nextRecordSequence));
         //#IMPORTANT#connect to server is a cycle.
         connect();
 
@@ -53,7 +52,6 @@ public class OssAlarmFileAPISftpClient {
                     String fileName = entry.getFilename();
                     if(fileName.replaceAll("[. ]" , "").isEmpty()) continue; //ignore . and .. files
                     String path = filePath.substring(0, filePath.lastIndexOf("/") + 1);
-                    log.info("Sftp getting file: " + path + fileName);
                     channelSftp.get(path + fileName, byteArrayOutputStream);
 
                     String fileContent = byteArrayOutputStream.toString("UTF-8");
@@ -74,9 +72,8 @@ public class OssAlarmFileAPISftpClient {
 
                     //records
                     String stringModifiedAt = modifiedAt.toString();
-                    for (int i = nextRecordSequence; i < splitContent.length - 1; i++) {
-                        log.info(String.format("nextRecordSequence value = %d", nextRecordSequence));
-                        log.info(String.format("i value = %d", i));
+                    int i ;
+                    for (i = nextRecordSequence; i < splitContent.length - 1; i++) {
                         JSONObject jo = new JSONObject();
                         jo.put(ID_FIELD, fieldByName);
                         jo.put(RECORD_SEQUENCE_FIELD, i);
@@ -87,7 +84,8 @@ public class OssAlarmFileAPISftpClient {
 
                         jsonArray.put(jo);
                     }
-
+                    if(i == rowsAffectedValue) log.info(String.format("Retrieved %d of %d from File: %s", i, rowsAffectedValue, fileName));
+                    else log.error(String.format("Only %d of %d records were retrieved from File: %s", i, rowsAffectedValue, fileName));
                 }
             }
         } catch (SftpException e ) {
