@@ -34,6 +34,7 @@ public class OssAlarmFileAPISftpClient {
     }
 
     protected JSONArray getNextFile(Instant since, Integer nextRecordSequence) {
+        log.info(String.format("Starting nextRecordSequence = %d", nextRecordSequence));
         //#IMPORTANT#connect to server is a cycle.
         connect();
 
