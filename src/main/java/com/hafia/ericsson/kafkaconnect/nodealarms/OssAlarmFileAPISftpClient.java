@@ -85,7 +85,7 @@ public class OssAlarmFileAPISftpClient {
                         jsonArray.put(jo);
                     }
                     if(i == rowsAffectedValue) log.info(String.format("Retrieved %d of %d from File: %s", i, rowsAffectedValue, fileName));
-                    else log.error(String.format("Only %d of %d records were retrieved from File: %s", i, rowsAffectedValue, fileName));
+                    else log.info(String.format("started from %d Only %d of %d records were retrieved from File: %s", nextRecordSequence , i, rowsAffectedValue, fileName));
                 }
             }
         } catch (SftpException e ) {
