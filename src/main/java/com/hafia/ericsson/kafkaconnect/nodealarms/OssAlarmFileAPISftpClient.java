@@ -56,7 +56,6 @@ public class OssAlarmFileAPISftpClient {
                     channelSftp.get(path + fileName, byteArrayOutputStream);
 
                     String fileContent = byteArrayOutputStream.toString("UTF-8");
-                    JSONObject jo = new JSONObject();
 
                     Pattern regex = Pattern.compile("\\d{8,}");
                     Matcher regexMatcher = regex.matcher(fileName);
@@ -73,16 +72,18 @@ public class OssAlarmFileAPISftpClient {
                     else rowsAffectedValue = -1;
 
                     //records
-                    log.info("Start nextRecordSequence=" + nextRecordSequence);
                     String stringModifiedAt = modifiedAt.toString();
                     for (int i = nextRecordSequence; i < splitContent.length - 1; i++) {
-                        log.info("i=" , i);
+                        log.info(String.format("nextRecordSequence value = %d", nextRecordSequence));
+                        log.info(String.format("i value = %d", i));
+                        JSONObject jo = new JSONObject();
                         jo.put(ID_FIELD, fieldByName);
                         jo.put(RECORD_SEQUENCE_FIELD, i);
                         jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
                         jo.put(MODIFIED_AT_FIELD, stringModifiedAt);
                         jo.put(FILE_ROWS_AFFECTED_FIELD, rowsAffectedValue);
                         jo.put(ALARM_RECORD_FIELD, splitContent[i]);
+
                         jsonArray.put(jo);
                     }
 
