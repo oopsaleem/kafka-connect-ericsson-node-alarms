@@ -93,7 +93,6 @@ public class AlarmSourceTask extends SourceTask {
     }
 
     private SourceRecord generateSourceRecord(OssAlarmFile ossAlarmFile) {
-        log.info("generateSourceRecord seq# " + ossAlarmFile.getRecordSequence());
         return new SourceRecord(
                 sourcePartition(),
                 sourceOffset(ossAlarmFile.getModifiedAt(), ossAlarmFile.getRecordSequence()),
@@ -135,7 +134,6 @@ public class AlarmSourceTask extends SourceTask {
     }
 
     private Struct buildRecordValue(OssAlarmFile ossAlarmFile) {
-        log.info("buildRecordValue seq# " + ossAlarmFile.getRecordSequence());
         Struct valueStruct = new Struct(VALUE_SCHEMA)
                 .put(RECORD_SEQUENCE_FIELD, ossAlarmFile.getRecordSequence())
                 .put(ALARM_RECORD_FIELD, ossAlarmFile.getAlarmRecord());
