@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -83,13 +84,22 @@ public class AlarmSourceTask extends SourceTask {
             nextQuerySince = lastModifiedAt.plusSeconds(1); //add 1 second to ignore lastModified file.
             //reset record sequence as file was fully fetched.
             nextRecordSequence = 0;
+            Duration.between(Instant.now(), lastModifiedAt).toMinutes();
             log.info("Next file after 5 minutes.");
-            Thread.sleep(5 * 60 * 1_000);             //query after 5 minutes. Next time it will wait 15 seconds
+            Thread.sleep(sleepMillis(lastModifiedAt));             //query after 5 minutes from lastModified File.
         } else {
             log.info("Next file after 15 seconds.");
             Thread.sleep(15 * 1_000);             //query after 15 seconds.
         }
         return records;
+    }
+
+    long sleepMillis(Instant since){
+        Instant now = Instant.now();
+        long duration = Duration.between(since, now).toMillis();
+        long waitingMillis =  ((5 * 60 * 1000) - duration);
+
+        return (waitingMillis + 30_000);
     }
 
     private SourceRecord generateSourceRecord(OssAlarmFile ossAlarmFile) {
