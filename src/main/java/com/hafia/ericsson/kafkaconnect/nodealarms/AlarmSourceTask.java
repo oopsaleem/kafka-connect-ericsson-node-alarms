@@ -43,6 +43,7 @@ public class AlarmSourceTask extends SourceTask {
     }
 
     private void initializeLastVariables() {
+        //TODO:consider resuming job from last file ID
         Map<String, Object> lastSourceOffset;
         lastSourceOffset = context.offsetStorageReader().offset(sourcePartition());
         if (lastSourceOffset == null) {
@@ -105,7 +106,7 @@ public class AlarmSourceTask extends SourceTask {
     private SourceRecord generateSourceRecord(OssAlarmFile ossAlarmFile) {
         return new SourceRecord(
                 sourcePartition(),
-                sourceOffset(ossAlarmFile.getModifiedAt(), ossAlarmFile.getRecordSequence()),
+                sourceOffset(ossAlarmFile.getModifiedAt(), ossAlarmFile.getRecordSequence(), ossAlarmFile.getId()),
                 config.topicConfig,
                 null, // partition will be inferred by the framework
                 KEY_SCHEMA,
@@ -126,8 +127,9 @@ public class AlarmSourceTask extends SourceTask {
         return map;
     }
 
-    private Map<String, String> sourceOffset(Instant modifiedAt, Integer recordSequence) {
+    private Map<String, String> sourceOffset(Instant modifiedAt, Integer recordSequence, long id) {
         Map<String, String> map = new HashMap<>();
+        map.put(ID_FIELD, String.valueOf(id));
         map.put(MODIFIED_AT_FIELD, DateUtils.MaxInstant(modifiedAt, nextQuerySince).toString());
         map.put(RECORD_SEQUENCE_FIELD, recordSequence.toString());
         return map;
