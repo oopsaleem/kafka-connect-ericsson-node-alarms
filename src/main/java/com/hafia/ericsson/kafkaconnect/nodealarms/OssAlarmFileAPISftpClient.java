@@ -73,8 +73,10 @@ public class OssAlarmFileAPISftpClient {
                     else rowsAffectedValue = -1;
 
                     //records
+                    log.info("Start nextRecordSequence=" + nextRecordSequence);
                     String stringModifiedAt = modifiedAt.toString();
                     for (int i = nextRecordSequence; i < splitContent.length - 1; i++) {
+                        log.info("i=" , i);
                         jo.put(ID_FIELD, fieldByName);
                         jo.put(RECORD_SEQUENCE_FIELD, i);
                         jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
