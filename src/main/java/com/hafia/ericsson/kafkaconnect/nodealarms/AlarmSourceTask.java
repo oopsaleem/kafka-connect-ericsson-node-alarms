@@ -27,7 +27,7 @@ public class AlarmSourceTask extends SourceTask {
 
     private Instant nextQuerySince;
     private Integer nextRecordSequence;
-    private Long lastFileId;
+    private Long lastFileId = 0L;
     private Instant lastModifiedAt;
     private OssAlarmFileAPISftpClient ossAlarmFileAPISftpClient;
 
