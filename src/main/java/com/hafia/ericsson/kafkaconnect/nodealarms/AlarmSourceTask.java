@@ -100,7 +100,7 @@ public class AlarmSourceTask extends SourceTask {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
                     .withZone(ZoneId.systemDefault());
             Instant nexAttemptInstant = ZonedDateTime.now().toInstant().plusMillis(remainSleep);
-            log.info("Next sftp attempt at %s.", formatter.format(nexAttemptInstant));
+            log.info("Next sftp attempt at " + formatter.format(nexAttemptInstant));
             Thread.sleep(remainSleep);
         } else {
             log.info("Next file after 15 seconds.");
