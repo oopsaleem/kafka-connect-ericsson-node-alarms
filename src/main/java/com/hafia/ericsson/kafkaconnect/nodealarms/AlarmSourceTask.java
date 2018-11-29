@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +28,7 @@ public class AlarmSourceTask extends SourceTask {
     public AlarmSourceConnectorConfig config;
 
     private Instant nextQuerySince;
-    private Integer nextRecordSequence;
+    private Integer nextRecordSequence = 0;
     private Long lastFileId = 0L;
     private Instant lastModifiedAt;
     private OssAlarmFileAPISftpClient ossAlarmFileAPISftpClient;
@@ -51,6 +53,7 @@ public class AlarmSourceTask extends SourceTask {
             // we haven't fetched anything yet, so we initialize as per config.
             nextQuerySince = ZonedDateTime.now().minusMinutes(config.sinceConfig).toInstant();
             nextRecordSequence = 0; //Start first record in file.
+            lastFileId = 0L;
         } else {
             //we have already fetched records, just resume from lastSourceOffset.
             Object offsetModifiedAt = lastSourceOffset.get(MODIFIED_AT_FIELD);
@@ -93,8 +96,12 @@ public class AlarmSourceTask extends SourceTask {
             //reset record sequence as file was fully fetched.
             nextRecordSequence = 0;
             Duration.between(Instant.now(), lastModifiedAt).toMinutes();
-            log.info("Next file after 5 minutes.");
-            Thread.sleep(sleepMillis(lastModifiedAt));             //query after 5 minutes from lastModified File.
+            long remainSleep = sleepMillis(lastModifiedAt);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                    .withZone(ZoneId.systemDefault());
+            Instant nexAttemptInstant = ZonedDateTime.now().toInstant().plusMillis(remainSleep);
+            log.info("Next sftp attempt at %s.", formatter.format(nexAttemptInstant));
+            Thread.sleep(remainSleep);
         } else {
             log.info("Next file after 15 seconds.");
             Thread.sleep(15 * 1_000);             //query after 15 seconds.
