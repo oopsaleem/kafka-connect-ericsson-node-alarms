@@ -27,6 +27,7 @@ public class AlarmSourceTask extends SourceTask {
 
     private Instant nextQuerySince;
     private Integer nextRecordSequence;
+    private Long lastFileId;
     private Instant lastModifiedAt;
     private OssAlarmFileAPISftpClient ossAlarmFileAPISftpClient;
 
@@ -54,13 +55,19 @@ public class AlarmSourceTask extends SourceTask {
             //we have already fetched records, just resume from lastSourceOffset.
             Object offsetModifiedAt = lastSourceOffset.get(MODIFIED_AT_FIELD);
             Object offsetRecordSequence = lastSourceOffset.get(RECORD_SEQUENCE_FIELD);
+            Object offsetFileId = lastSourceOffset.get(ID_FIELD);
+
+            //resume from same file to verify all records has been sent to kafka.
+            if (offsetFileId instanceof String) {
+                lastFileId = Long.parseLong((String)offsetFileId);
+            }
             if (offsetModifiedAt instanceof String) {
-                //resume from same file to verify all records has been sent to kafka.
                 nextQuerySince = Instant.parse((String) offsetModifiedAt);
             }
+
+            //resume the next record.
             if (offsetRecordSequence != null && (offsetRecordSequence instanceof String)) {
                 nextRecordSequence = Integer.valueOf((String) offsetRecordSequence);
-                //resume the next record.
                 nextRecordSequence += 1;
             }
         }
@@ -70,7 +77,7 @@ public class AlarmSourceTask extends SourceTask {
     public List<SourceRecord> poll() throws InterruptedException {
         // fetch data
         final ArrayList<SourceRecord> records = new ArrayList<>();
-        JSONArray fileRecords = ossAlarmFileAPISftpClient.getNextFile(nextQuerySince, nextRecordSequence);
+        JSONArray fileRecords = ossAlarmFileAPISftpClient.getNextFile(nextQuerySince, nextRecordSequence, lastFileId);
         // we'll count how many results we get with i
         boolean fetched = false;
         for (Object obj : fileRecords) {

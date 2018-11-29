@@ -33,7 +33,7 @@ public class OssAlarmFileAPISftpClient {
         errorMessages = new ArrayList<>();
     }
 
-    protected JSONArray getNextFile(Instant since, Integer nextRecordSequence) {
+    protected JSONArray getNextFile(Instant since, Integer nextRecordSequence, long lastFileId) {
         //#IMPORTANT#connect to server is a cycle.
         connect();
 
@@ -70,22 +70,24 @@ public class OssAlarmFileAPISftpClient {
                     if (rowsAffectedMatcher.find()) rowsAffectedValue = Integer.parseInt(rowsAffectedMatcher.group(1));
                     else rowsAffectedValue = -1;
 
-                    //records
                     String stringModifiedAt = modifiedAt.toString();
-                    int i ;
-                    for (i = nextRecordSequence; i < splitContent.length - 1; i++) {
+
+                    //reset
+                    if(lastFileId != fieldByName) nextRecordSequence = 0;
+                    int seq ;
+                    for (seq = nextRecordSequence; seq < splitContent.length - 1; seq++) {
                         JSONObject jo = new JSONObject();
                         jo.put(ID_FIELD, fieldByName);
-                        jo.put(RECORD_SEQUENCE_FIELD, i);
+                        jo.put(RECORD_SEQUENCE_FIELD, seq);
                         jo.put(OSS_GENERATION_FIELD, config.ossGenerationConfig);
                         jo.put(MODIFIED_AT_FIELD, stringModifiedAt);
                         jo.put(FILE_ROWS_AFFECTED_FIELD, rowsAffectedValue);
-                        jo.put(ALARM_RECORD_FIELD, splitContent[i]);
+                        jo.put(ALARM_RECORD_FIELD, splitContent[seq]);
 
                         jsonArray.put(jo);
                     }
-                    if(i == rowsAffectedValue) log.info(String.format("Retrieved %d of %d from File: %s", i, rowsAffectedValue, fileName));
-                    else log.info(String.format("started from %d Only %d of %d records were retrieved from File: %s", nextRecordSequence , i, rowsAffectedValue, fileName));
+                    if(seq == rowsAffectedValue) log.info(String.format("Retrieved %d of %d from File: %s", seq, rowsAffectedValue, fileName));
+                    else log.info(String.format("started from %d Only %d of %d records were retrieved from File: %s", nextRecordSequence , seq, rowsAffectedValue, fileName));
                 }
             }
         } catch (SftpException e ) {
